@@ -20,11 +20,10 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen flex bg-gray-100">
-            {{-- @livewire('navigation-dropdown') --}}
             <!-- Sidebar -->
             <x-layouts.sidebar />
 
-            <div class="max-h-screen flex flex-col">
+            <div class="flex-1 max-h-screen flex flex-col">
                 <x-layouts.navbar />
 
                 <!-- Page Heading -->
