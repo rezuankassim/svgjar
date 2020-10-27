@@ -14,6 +14,14 @@
                     </div>
                     
                     <div class="flex items-center space-x-2">
+                        <x-input.group borderless paddingless for="perPage" label="Per Page"> 
+                            <x-input.select wire:model="perPage" id="perPage">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </x-input.select>
+                        </x-input.group>
+
                         <x-dropdown label="Bulk Actions">
                             <x-dropdown.item type="button" wire:click="exportSelected" class="flex items-center space-x-2">
                                 <svg class="w-5 h-5 text-cool-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
@@ -65,16 +73,18 @@
 
                                     <x-table.heading 
                                         sortable
-                                        :direction="$sortField === 'name' ? $sortDirection : null"
+                                        multi-column
+                                        :direction="$sorts['name'] ?? null"
                                         wire:click="sortBy('name')"
                                         class="w-full"
                                     >Name</x-table.heading>
 
-                                    <x-table.heading :direction="$sortField === 'content' ? $sortDirection : null">Display</x-table.heading>
+                                    <x-table.heading>Display</x-table.heading>
 
                                     <x-table.heading 
                                         sortable
-                                        :direction="$sortField === 'created_at' ? $sortDirection : null"
+                                        multi-column
+                                        :direction="$sorts['created_at'] ?? null"
                                         wire:click="sortBy('created_at')"
                                     >Created Date</x-table.heading>
 
@@ -116,7 +126,7 @@
                                         </x-table.row>
                                     @empty
                                         <x-table.row>
-                                            <x-table.cell colspan="3">
+                                            <x-table.cell colspan="5">
                                                 <div class="flex justify-center items-center">
                                                     <span class="font-medium py-4 text-gray-500">No record found...</span>
                                                 </div>
@@ -127,11 +137,9 @@
                             </x-table>
                         </div>  
 
-                        @if($icons->hasPages())
-                            <div>
-                                {{ $icons->links() }}
-                            </div>
-                        @endif    
+                        <div>
+                            {{ $icons->links() }}
+                        </div>
                     </div>
                 </div>
             </div>

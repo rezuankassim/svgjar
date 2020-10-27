@@ -5,13 +5,13 @@ namespace App\Http\Livewire\Icons;
 use App\Models\Icon;
 use Carbon\Carbon;
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Http\Livewire\DataTable\WithSorting;
 use App\Http\Livewire\DataTable\WithBulkActions;
+use App\Http\Livewire\DataTable\WithPerPagePagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPerPagePagination;
     use WithSorting;
     use WithBulkActions;
 
@@ -26,7 +26,7 @@ class Index extends Component
     ];
     public Icon $editing;
 
-    protected $queryString = ['sortField', 'sortDirection'];
+    // protected $queryString = ['sortField', 'sortDirection'];
 
     protected $rules = [
         'editing.name' => 'required',
@@ -110,7 +110,7 @@ class Index extends Component
 
     public function getRowsProperty()
     {
-        return $this->rowsQuery->paginate(10);
+        return $this->applyPagination($this->rowsQuery);
     }
 
     public function render()
