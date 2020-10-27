@@ -6,14 +6,18 @@ use App\Models\Icon;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Http\Livewire\DataTable\WithSorting;
+use App\Http\Livewire\DataTable\WithBulkActions;
 
 class Index extends Component
 {
     use WithPagination;
+    use WithSorting;
+    use WithBulkActions;
 
-    public $sortField;
-    public $sortDirection = 'asc';
     public $showEditModal = false;
+    public $showDeleteModal = false;
+    public $isCreating = true;
     public $showFilters = false;
     public $filters = [
         'search' => null,
@@ -39,15 +43,6 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function sortBy($field)
-    {
-        $this->sortDirection = $this->sortField === $field
-            ? $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc'
-            : 'asc';
-    
-        $this->sortField = $field;
-    }
-
     public function makeBlankIcon()
     {
         return Icon::make();
@@ -57,16 +52,8 @@ class Index extends Component
     {
         if ($this->editing->getKey()) $this->editing = $this->makeBlankIcon();
 
+        $this->isCreating = true;
         $this->showEditModal = true;
-    }
-
-    public function edit(Icon $icon)
-    {
-        if ($this->editing->isNot($icon)) $this->editing = $icon;
-
-        $this->showEditModal = true;
-
-        $this->resetValidation();
     }
 
     public function save()
@@ -80,20 +67,56 @@ class Index extends Component
         $this->resetValidation();
     }
 
+    public function edit(Icon $icon)
+    {
+        if ($this->editing->isNot($icon)) $this->editing = $icon;
+
+        $this->isCreating = false;
+        $this->showEditModal = true;
+
+        $this->resetValidation();
+    }
+
+    public function exportSelected()
+    {
+        $this->reset(['selectAll', 'selectPage']);
+
+        return response()->streamDownload(function () {
+            echo $this->selectedRowsQuery->toCsv();
+        }, 'icons.csv');
+    }
+
+    public function deleteSelected()
+    {
+        $this->reset(['selectAll', 'selectPage', 'showDeleteModal']);
+
+        $this->selectedRowsQuery->delete();
+    }
+
     public function resetFilters()
     {
         $this->reset('filters');
     }
 
+    public function getRowsQueryProperty()
+    {
+        $query = Icon::query()
+            ->when($this->filters['created-date-min'], fn($query, $date) => $query->where('created_at', '>=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
+            ->when($this->filters['created-date-max'], fn($query, $date) => $query->where('created_at', '<=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
+            ->when($this->filters['search'], fn($query, $search) => $query->search('name', $search));
+
+        return $this->applySorting($query);
+    }
+
+    public function getRowsProperty()
+    {
+        return $this->rowsQuery->paginate(10);
+    }
+
     public function render()
     {
         return view('livewire.icons.index', [
-            'icons' => Icon::query()
-                ->when($this->filters['created-date-min'], fn($query, $date) => $query->where('created_at', '>=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
-                ->when($this->filters['created-date-max'], fn($query, $date) => $query->where('created_at', '<=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
-                ->when($this->filters['search'], fn($query, $search) => $query->search('name', $search))
-                ->when($this->sortField, fn ($query) => $query->orderBy($this->sortField, $this->sortDirection))
-                ->paginate(10),
+            'icons' => $this->rows,
         ]);
     }
 }
