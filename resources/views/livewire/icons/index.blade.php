@@ -10,7 +10,7 @@
                         </div>
                         
 
-                        <x-button.link wire:click="$toggle('showFilters')">@if($showFilters) Hide @endif Advanced Search</x-button.link>
+                        <x-button.link wire:click="toggleShowFilters">@if($showFilters) Hide @endif Advanced Search</x-button.link>
                     </div>
                     
                     <div class="flex items-center space-x-2">

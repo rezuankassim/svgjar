@@ -2,18 +2,20 @@
 
 namespace App\Http\Livewire\Icons;
 
-use App\Models\Icon;
 use Carbon\Carbon;
+use App\Models\Icon;
 use Livewire\Component;
 use App\Http\Livewire\DataTable\WithSorting;
+use App\Http\Livewire\DataTable\WithCachedRows;
 use App\Http\Livewire\DataTable\WithBulkActions;
 use App\Http\Livewire\DataTable\WithPerPagePagination;
 
 class Index extends Component
 {
-    use WithPerPagePagination;
     use WithSorting;
+    use WithCachedRows;
     use WithBulkActions;
+    use WithPerPagePagination;
 
     public $showEditModal = false;
     public $showDeleteModal = false;
@@ -48,12 +50,33 @@ class Index extends Component
         return Icon::make();
     }
 
+    public function toggleShowFilters()
+    {
+        $this->useCachedRows();
+
+        $this->showFilters = ! $this->showFilters;
+    }
+
     public function create()
     {
+        $this->useCachedRows();
+
         if ($this->editing->getKey()) $this->editing = $this->makeBlankIcon();
 
         $this->isCreating = true;
         $this->showEditModal = true;
+    }
+
+    public function edit(Icon $icon)
+    {
+        $this->useCachedRows();
+        
+        if ($this->editing->isNot($icon)) $this->editing = $icon;
+
+        $this->isCreating = false;
+        $this->showEditModal = true;
+
+        $this->resetValidation();
     }
 
     public function save()
@@ -63,16 +86,6 @@ class Index extends Component
         $this->editing->save();
 
         $this->showEditModal = false;
-
-        $this->resetValidation();
-    }
-
-    public function edit(Icon $icon)
-    {
-        if ($this->editing->isNot($icon)) $this->editing = $icon;
-
-        $this->isCreating = false;
-        $this->showEditModal = true;
 
         $this->resetValidation();
     }
@@ -110,7 +123,9 @@ class Index extends Component
 
     public function getRowsProperty()
     {
-        return $this->applyPagination($this->rowsQuery);
+        return $this->remember(function () {
+            return $this->applyPagination($this->rowsQuery);
+        });
     }
 
     public function render()
