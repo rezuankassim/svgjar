@@ -36,7 +36,7 @@
                             </x-dropdown.item>
                         </x-dropdown>
 
-                        <x-button.primary wire:click="create">
+                        <x-button.primary x-data="" x-on:keydown.cmd.enter.prevent.stop.window="$refs.create.click()" x-ref="create" wire:click="create" id="create">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         </x-button.primary>
                     </div>
@@ -109,14 +109,35 @@
                                     @endif
                                     
                                     @forelse ($icons as $icon)
-                                        <x-table.row wire:loading.class.delay="opacity-50" wire:key="row-icon-{{ $icon->id }}">
+                                        <x-table.row 
+                                            wire:loading.class.delay="opacity-50"
+                                            wire:key="row-icon-{{ $icon->id }}"
+                                        >
                                             <x-table.cell class="pr-0">
                                                 <x-input.checkbox wire:model="selected" value="{{ $icon->id }}" />
                                             </x-table.cell>
 
                                             <x-table.cell>{{ $icon->name }}</x-table.cell>
 
-                                            <x-table.cell>{!! $icon->content !!}</x-table.cell>
+                                            <x-table.cell>
+                                                <div class="w-full h-full relative">
+                                                    <div
+                                                        x-data="{ content: '{{ $icon->content }}'}"
+                                                        x-on:click="$clipboard(content)"
+                                                        class="cursor-pointer flex flex-row justify-center items-center h-full"
+                                                    >
+                                                        <div class="bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 focus:outline-none transition duration-100 ease-in-out w-10 h-10 bg-indigo-200 rounded-full text-indigo-700" tabindex="0">
+                                                            <div class="flex flex-row justify-center items-center h-full">
+                                                                {!! $icon->content !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {{-- <div class="absolute inset-0">
+                                                        
+                                                    </div> --}}
+                                                </div>
+                                            </x-table.cell>
 
                                             <x-table.cell>{{ $icon->date_for_humans }}</x-table.cell>
                                             
@@ -148,12 +169,12 @@
 
     <!-- Edit Modal -->
     <form wire:submit.prevent="save">
-        <x-modal.dialog wire:model.defer="showEditModal">
+        <x-modal.dialog wire:model.defer="showEditModal" trigger="create">
             <x-slot name="title">@if ($isCreating) Add @else Edit @endif Icon</x-slot>
-    
+
             <x-slot name="content">
                 <x-input.group for="name" label="Name" :error="$errors->first('editing.name')">
-                    <x-input.text id="name" wire:model="editing.name" />
+                    <x-input.text id="name" wire:model="editing.name" autofocus/>
                 </x-input.group>
 
                 <x-input.group for="content" label="Content" :error="$errors->first('editing.content')">
@@ -162,7 +183,7 @@
             </x-slot>
     
             <x-slot name="footer">
-                <x-button.secondary wire:click="$toggle('showEditModal')">Cancel</x-button.secondary>
+                <x-button.secondary wire:click="hide('showEditModal')">Cancel</x-button.secondary>
                 <x-button.primary type="submit">Submit</x-button.primary> 
             </x-slot>
         </x-modal.dialog>
@@ -176,7 +197,7 @@
             <x-slot name="content">This will delete the records and this action is irreversable.</x-slot>
     
             <x-slot name="footer">
-                <x-button.secondary wire:click="$toggle('showDeleteModal')">No</x-button.secondary>
+                <x-button.secondary wire:click="hide('showDeleteModal')" autofocus>No</x-button.secondary>
                 <x-button.primary type="submit">Yes, I am sure.</x-button.primary>
             </x-slot>
         </x-modal.confirmation>

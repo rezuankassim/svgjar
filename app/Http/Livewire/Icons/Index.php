@@ -96,6 +96,15 @@ class Index extends Component
         $this->resetValidation();
     }
 
+    public function hide($model)
+    {
+        $this->useCachedRows();
+
+        $this->dispatchBrowserEvent('close', [
+            'id' => md5($model)
+        ]);
+    }
+
     public function exportSelected()
     {
         $this->reset(['selectAll', 'selectPage']);

@@ -19,6 +19,7 @@
         <!-- Scripts -->
         <script src="https://unpkg.com/moment" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/@ryangjchandler/alpine-clipboard@0.1.x/dist/alpine-clipboard.umd.js" defer></script>
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.6.0/dist/alpine.js" defer></script>
     </head>
     <body class="font-sans antialiased">

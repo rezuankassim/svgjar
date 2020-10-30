@@ -27,6 +27,7 @@ trait WithBulkActions
             return $this->selectPageRows();
         }
 
+        $this->selectAll = false;
         $this->selected = [];
     }
 
