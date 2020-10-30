@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\DataTable;
 
-
 trait WithCachedRows
 {
     protected $useCache = false;

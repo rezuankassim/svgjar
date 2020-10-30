@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Icons\StoreRequest;
-use App\Http\Requests\Icons\UpdateRequest;
 use App\Models\Icon;
 use Illuminate\Http\Request;
+use App\Http\Requests\Icons\StoreRequest;
+use App\Http\Requests\Icons\UpdateRequest;
 
 class IconController extends Controller
 {

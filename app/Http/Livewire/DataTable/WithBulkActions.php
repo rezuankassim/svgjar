@@ -10,7 +10,9 @@ trait WithBulkActions
 
     public function renderingWithBulkActions()
     {
-        if ($this->selectAll) $this->selectPageRows();
+        if ($this->selectAll) {
+            $this->selectPageRows();
+        }
     }
 
     public function updatedSelected()
@@ -21,14 +23,16 @@ trait WithBulkActions
 
     public function updatedSelectPage($value)
     {
-        if ($value) return $this->selectPageRows();
+        if ($value) {
+            return $this->selectPageRows();
+        }
 
         $this->selected = [];
     }
 
     public function selectPageRows()
     {
-        $this->selected = $this->rows->pluck('id')->map(fn($id) => (string) $id);
+        $this->selected = $this->rows->pluck('id')->map(fn ($id) => (string) $id);
     }
 
     public function selectAll()
@@ -39,6 +43,6 @@ trait WithBulkActions
     public function getSelectedRowsQueryProperty()
     {
         return (clone $this->rowsQuery)
-            ->unless($this->selectAll, fn($query) => $query->whereKey($this->selected));
+            ->unless($this->selectAll, fn ($query) => $query->whereKey($this->selected));
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IconController;
 use App\Http\Livewire\Icons\Index as IconIndex;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

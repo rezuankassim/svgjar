@@ -19,6 +19,7 @@ class Index extends Component
 
     public $showEditModal = false;
     public $showDeleteModal = false;
+    public $showPermissionModal = false;
     public $isCreating = true;
     public $showFilters = false;
     public $filters = [
@@ -26,6 +27,7 @@ class Index extends Component
         'created-date-min' => null,
         'created-date-max' => null,
     ];
+    public $selectedPermissions = [];
     public Icon $editing;
 
     // protected $queryString = ['sortField', 'sortDirection'];
@@ -61,7 +63,9 @@ class Index extends Component
     {
         $this->useCachedRows();
 
-        if ($this->editing->getKey()) $this->editing = $this->makeBlankIcon();
+        if ($this->editing->getKey()) {
+            $this->editing = $this->makeBlankIcon();
+        }
 
         $this->isCreating = true;
         $this->showEditModal = true;
@@ -71,7 +75,9 @@ class Index extends Component
     {
         $this->useCachedRows();
         
-        if ($this->editing->isNot($icon)) $this->editing = $icon;
+        if ($this->editing->isNot($icon)) {
+            $this->editing = $icon;
+        }
 
         $this->isCreating = false;
         $this->showEditModal = true;
@@ -114,9 +120,9 @@ class Index extends Component
     public function getRowsQueryProperty()
     {
         $query = Icon::query()
-            ->when($this->filters['created-date-min'], fn($query, $date) => $query->where('created_at', '>=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
-            ->when($this->filters['created-date-max'], fn($query, $date) => $query->where('created_at', '<=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
-            ->when($this->filters['search'], fn($query, $search) => $query->search('name', $search));
+            ->when($this->filters['created-date-min'], fn ($query, $date) => $query->where('created_at', '>=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
+            ->when($this->filters['created-date-max'], fn ($query, $date) => $query->where('created_at', '<=', Carbon::createFromFormat('d/m/Y', $date)->startOfDay()))
+            ->when($this->filters['search'], fn ($query, $search) => $query->search('name', $search));
 
         return $this->applySorting($query);
     }
