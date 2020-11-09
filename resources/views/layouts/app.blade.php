@@ -42,6 +42,8 @@
                     {{ $slot }}
                 </main>
             </div>
+
+            <x-notification />
         </div>
 
         @stack('modals')

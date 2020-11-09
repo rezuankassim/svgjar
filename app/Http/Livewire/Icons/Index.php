@@ -41,7 +41,7 @@ class Index extends Component
     {
         $this->editing = $this->makeBlankIcon();
     }
-
+    
     public function updatedFilters()
     {
         $this->resetPage();
@@ -94,6 +94,11 @@ class Index extends Component
         $this->showEditModal = false;
 
         $this->resetValidation();
+
+        $this->notify(json_encode([
+            'message' => 'Yay! Everything worked!',
+            'submessage' => 'A icon has been created successfully.',
+        ]));
     }
 
     public function hide($model)
@@ -144,7 +149,7 @@ class Index extends Component
     }
 
     public function render()
-    {
+    {    
         return view('livewire.icons.index', [
             'icons' => $this->rows,
         ]);

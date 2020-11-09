@@ -6,7 +6,7 @@
                 <div class="flex justify-between items-center">
                     <div class="flex space-x-2">
                         <div class="w-64">
-                            <x-input.text wire:model="filters.search" class="w-full h-10" placeholder="Search Icons..."></x-input.text>
+                            <x-input.text x-data="" x-on:keydown.window.prevent.slash="$refs.searchField.focus()" x-ref="searchField"  wire:model="filters.search" class="w-full h-10" placeholder="Search Icons..."></x-input.text>
                         </div>
                         
 
@@ -14,8 +14,8 @@
                     </div>
                     
                     <div class="flex items-center space-x-2">
-                        <x-input.group borderless paddingless for="perPage" label="Per Page"> 
-                            <x-input.select wire:model="perPage" id="perPage">
+                        <x-input.group borderless paddingless labelless for="perPage" label="Per Page"> 
+                            <x-input.select wire:model="perPage" id="perPage" class="w-full">
                                 <option value="10">10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
@@ -23,12 +23,6 @@
                         </x-input.group>
 
                         <x-dropdown label="Bulk Actions">
-                            <x-dropdown.item type="button" wire:click="exportSelected" class="flex items-center space-x-2">
-                                <svg class="w-5 h-5 text-cool-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-
-                                <span>Export</span>
-                            </x-dropdown.item>
-
                             <x-dropdown.item type="button" wire:click="$toggle('showDeleteModal')" class="flex items-center space-x-2">
                                 <svg class="w-5 h-5 text-cool-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
 
@@ -126,16 +120,12 @@
                                                         x-on:click="$clipboard(content)"
                                                         class="cursor-pointer flex flex-row justify-center items-center h-full"
                                                     >
-                                                        <div class="bg-opacity-0 hover:bg-opacity-100 focus:bg-opacity-100 focus:outline-none transition duration-100 ease-in-out w-10 h-10 bg-indigo-200 rounded-full text-indigo-700" tabindex="0">
+                                                        <div class="bg-opacity-0 hover:bg-indigo-100 focus:bg-indigo-100 focus:outline-none transition duration-100 ease-in-out w-10 h-10 bg-indigo-200 rounded-full text-indigo-700" tabindex="0">
                                                             <div class="flex flex-row justify-center items-center h-full">
                                                                 {!! $icon->content !!}
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    {{-- <div class="absolute inset-0">
-                                                        
-                                                    </div> --}}
                                                 </div>
                                             </x-table.cell>
 
