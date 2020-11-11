@@ -3,11 +3,11 @@
         messages: [],
         sessionNotify: '{{ session()->get('notify') }}',
         remove(message) {
-            this.messages.splice(this.messages.indexOf(message), 1)
+            this.messages.splice(this.messages.findIndex(el => el.message === message.message), 1)
         }
     }"
     x-init="() => {if (sessionNotify) { messages.push(JSON.parse(sessionNotify)); setTimeout(() => { remove(sessionNotify) }, 2500);}}"
-    x-on:notify.window="console.log($event.detail); let message = $event.detail; messages.push(JSON.parse(message)); setTimeout(() => { remove(message) }, 2500)"
+    x-on:notify.window="console.log($event.detail); let message = $event.detail; messages.push(JSON.parse(message)); setTimeout(() => { remove(JSON.parse(message)) }, 2500)"
     class="fixed inset-0 flex flex-col items-end justify-center px-4 py-6 pointer-events-none sm:p-6 sm:justify-start space-y-4 z-50"
 >
     <template x-for="(message, messageIndex) in messages" :key="messageIndex">

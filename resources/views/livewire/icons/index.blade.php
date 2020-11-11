@@ -116,8 +116,18 @@
                                             <x-table.cell>
                                                 <div class="w-full h-full relative">
                                                     <div
-                                                        x-data="{ content: '{{ $icon->content }}'}"
-                                                        x-on:click="$clipboard(content)"
+                                                        x-data="{
+                                                            name: '{{ $icon->name }}',
+                                                            content: '{{ $icon->content }}',
+                                                            copy(content, $dispatch) {
+                                                                $clipboard(content)
+                                                                $dispatch('notify', JSON.stringify({
+                                                                    message: 'Yay! Everything worked!',
+                                                                    submessage: `Copied '${this.name}' into clipboard.`,
+                                                                }))
+                                                            }
+                                                        }"
+                                                        x-on:click="copy(content, $dispatch)"
                                                         class="cursor-pointer flex flex-row justify-center items-center h-full"
                                                     >
                                                         <div class="bg-opacity-0 hover:bg-indigo-100 focus:bg-indigo-100 focus:outline-none transition duration-100 ease-in-out w-10 h-10 bg-indigo-200 rounded-full text-indigo-700" tabindex="0">
