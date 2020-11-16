@@ -24,13 +24,13 @@
                 </li>
 
                 <li>
-                    <x-layouts.sidebar-link :link="'#'" :active="request()->routeIs('users.*')">
+                    <x-layouts.sidebar-link :link="route('groups.index')" :active="request()->routeIs('groups.*')">
                         <x-slot name="icon">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                            <x-icon.user-group />
                         </x-slot>
 
                         <x-slot name="title">
-                            <span>Users</span>
+                            <span>Groups</span>
                         </x-slot>
                     </x-layouts.sidebar-link>
                 </li>

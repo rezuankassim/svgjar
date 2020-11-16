@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IconController;
-use App\Http\Livewire\Icons\Index as IconIndex;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,10 +28,16 @@ Route::group([
     Route::group([
         'prefix' => 'icons'
     ], function () {
-        Route::get('/', IconIndex::class)->name('icons.index');
-        Route::get('/create', [IconController::class, 'create'])->name('icons.create');
-        Route::post('/', [IconController::class, 'store'])->name('icons.store');
-        Route::get('/{icon}/edit', [IconController::class, 'edit'])->name('icons.edit');
-        Route::patch('/{icon}', [IconController::class, 'update'])->name('icons.update');
+        Route::get('/', \App\Http\Livewire\Icons\Index::class)->name('icons.index');
+        // Route::get('/create', [IconController::class, 'create'])->name('icons.create');
+        // Route::post('/', [IconController::class, 'store'])->name('icons.store');
+        // Route::get('/{icon}/edit', [IconController::class, 'edit'])->name('icons.edit');
+        // Route::patch('/{icon}', [IconController::class, 'update'])->name('icons.update');
+    });
+
+    Route::group([
+        'prefix' => 'groups'
+    ], function () {
+        Route::get('/', \App\Http\Livewire\Groups\Index::class)->name('groups.index');
     });
 });
